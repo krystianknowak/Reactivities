@@ -24,9 +24,7 @@ namespace Application.Activities
 
             public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
             {
-                // return await _context.Activities.FindAsync(request.Id);
-                var x =_context.Activities;
-                return new Activity();
+                return await _context.Activities.FindAsync(request.Id);
             }
         }
     }
