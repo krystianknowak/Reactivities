@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using MediatR;
 using Application.Activities;
+using Application.Core;
 
 namespace API
 {
