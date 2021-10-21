@@ -38,7 +38,7 @@ namespace Application.Activities
       {
         Activity activity = await _context.Activities.FindAsync(request.Activity.Id);
 
-        _mapper.Map(request.Activity, activity);
+        _mapper.Map<Activity, Activity>(request.Activity, activity);
 
         await _context.SaveChangesAsync();
 
