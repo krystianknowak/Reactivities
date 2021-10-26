@@ -5,7 +5,7 @@ import { Button, Item, Label, Segment } from "semantic-ui-react";
 
 const ActivityList = () => {
   const {
-    activityStore: { setSelectedActivity, activities, deleteActivity, loading },
+    activityStore: { setSelectedActivity, activitiesByDate, deleteActivity, loading },
   } = useStore();
 
   const [target, setTarget] = useState<string>();
@@ -21,7 +21,7 @@ const ActivityList = () => {
   return (
     <Segment>
       <Item.Group divided>
-        {activities.map((activity) => (
+        {activitiesByDate.map((activity) => (
           <Item key={activity.id}>
             <Item.Content>
               <Item.Header as="a">

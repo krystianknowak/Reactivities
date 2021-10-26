@@ -3,7 +3,7 @@ import { Activity } from "app/models/activity";
 import { makeAutoObservable, runInAction } from "mobx";
 import { v4 as uuid } from "uuid";
 export default class ActivityStore {
-  activities: Activity[] = [];
+  activityRegistry = new Map<string, Activity>();
   selectedActivity: Activity | undefined = undefined;
   editMode = false;
   loading = false;
@@ -11,6 +11,12 @@ export default class ActivityStore {
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  get activitiesByDate() {
+    return Array.from(this.activityRegistry.values()).sort(
+      (a, b) => Date.parse(a.date) - Date.parse(b.date)
+    );
   }
 
   loadActivities = async () => {
@@ -21,7 +27,9 @@ export default class ActivityStore {
         ...activity,
         date: activity.date.split("T")[0],
       }));
-      this.activities = correctDateResonse;
+      correctDateResonse.forEach((activity) =>
+        this.activityRegistry.set(activity.id, activity)
+      );
     } catch (error) {
       console.log(error);
     } finally {
@@ -34,9 +42,7 @@ export default class ActivityStore {
   };
 
   setSelectedActivity = (id: string) => {
-    this.selectedActivity = this.activities.find(
-      (activity) => activity.id === id
-    );
+    this.selectedActivity = this.activityRegistry.get(id);
   };
 
   cancelSelectedActivity = () => {
@@ -58,7 +64,7 @@ export default class ActivityStore {
       const newActivity = { ...activity, id: uuid() };
       await agent.Activities.create(newActivity);
       runInAction(() => {
-        this.activities = [...this.activities, newActivity];
+        this.activityRegistry.set(activity.id, activity);
         this.editMode = false;
         this.selectedActivity = newActivity;
       });
@@ -76,12 +82,7 @@ export default class ActivityStore {
     try {
       await agent.Activities.update(activity);
       runInAction(() => {
-        this.activities = [
-          ...this.activities.filter(
-            (currentActivity) => currentActivity.id !== activity.id
-          ),
-          activity,
-        ];
+        this.activityRegistry.set(activity.id, activity);
         this.editMode = false;
         this.selectedActivity = activity;
       });
@@ -99,12 +100,8 @@ export default class ActivityStore {
     try {
       await agent.Activities.delete(id);
       runInAction(() => {
-        this.activities = [
-          ...this.activities.filter(
-            (currentActivity) => currentActivity.id !== id
-          ),
-        ];
-        if(this.selectedActivity?.id === id) {
+        this.activityRegistry.delete(id);
+        if (this.selectedActivity?.id === id) {
           this.cancelSelectedActivity();
         }
       });
