@@ -5,9 +5,12 @@ import "./app/layout/styles.css";
 import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
 import { store, StoreContext } from "app/stores/store";
+import { BrowserRouter } from "react-router-dom";
 
 const ContextProviders: React.FC = ({ children }) => (
-  <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+  <StoreContext.Provider value={store}>
+    <BrowserRouter>{children}</BrowserRouter>
+  </StoreContext.Provider>
 );
 
 ReactDOM.render(
