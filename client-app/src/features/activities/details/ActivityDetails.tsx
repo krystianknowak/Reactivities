@@ -3,10 +3,10 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
-import ActivityDetailedChat from './ActivityDetailedChat';
-import ActivityDetailedInfo from './ActivityDetailedInfo';
-import ActivityDetailedSidebar from './ActivityDetailedSidebar';
-import ActivityDetailedHeader from './ActivityDetailedHeader';
+import ActivityDetailedChat from "./ActivityDetailedChat";
+import ActivityDetailedInfo from "./ActivityDetailedInfo";
+import ActivityDetailedSidebar from "./ActivityDetailedSidebar";
+import ActivityDetailedHeader from "./ActivityDetailedHeader";
 import { Grid } from "semantic-ui-react";
 
 const ActivityDetails = () => {
@@ -32,7 +32,7 @@ const ActivityDetails = () => {
         <ActivityDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <ActivityDetailedSidebar />
+        <ActivityDetailedSidebar activity={activity} />
       </Grid.Column>
     </Grid>
   );
